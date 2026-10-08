@@ -1,92 +1,120 @@
 # ConfigMate
 
-A simple, powerful configuration management library for Python applications.
+Configuration that fits your Python application.
 
-## Features
+ConfigMate loads settings from environment variables and files, supports nested
+keys, and validates values without adding required runtime dependencies.
 
-- Load configuration from multiple sources (environment variables, files, defaults)
-- Automatic type conversion and validation
-- Nested configuration support
-- Easy to use API
-- Zero required dependencies; install `configmate[yaml]` for YAML file support
-- **Stellar-specific configuration loading** (optional)
+<div class="docs-hero" markdown>
 
-## About Kairo Solutions
+<div class="docs-hero__intro" markdown>
 
-ConfigMate is maintained by Kairo Solutions, a technology organization focused on building reliable, developer-friendly open source tools. Our mission is to simplify complex development challenges through well-designed, intuitive libraries that integrate seamlessly into modern Python workflows.
+**PYTHON CONFIGURATION**
 
-We believe in:
+## Keep application settings clear and predictable
 
-- **Simplicity without sacrifice**: Powerful features that don't complicate the developer experience
-- **Reliability**: Thoroughly tested, stable releases you can depend on in production
-- **Community-driven development**: Transparent processes that welcome contributions from developers worldwide
-- **Practical solutions**: Tools designed to solve real-world problems faced by Python developers daily
+Start with a small API, then add typed defaults, validation, and environment
+overrides as your application needs them.
 
-## Installation
+[Read the configuration guide](configuration/usage.md){ .md-button .md-button--primary }
+[Browse the API](api/config.md){ .md-button }
 
-```bash
-pip install configmate
-```
+</div>
 
-## Usage
+<div class="docs-hero__example" markdown>
 
-### Basic Usage
+**A quick look**
 
 ```python
 from configmate import Config
 
 config = Config()
-config.load_from_env(prefix='APP_')
-config.load_from_file('config.yaml')
-config.set_default('debug', False, bool)
+config.set_default("debug", False, bool)
+config.load_from_env(prefix="APP_")
 
-debug = config.get('debug')
-database_url = config.get('database.url')
+if config.get("debug"):
+    print("Debug mode is enabled")
 ```
 
-### Stellar Configuration
+</div>
 
-ConfigMate includes optional Stellar-specific configuration loading for applications that interact with the Stellar network.
+</div>
 
-```python
-from configmate import StellarConfig
+## A practical configuration toolkit
 
-# Create a Stellar configuration instance
-stellar_config = StellarConfig()
+<div class="docs-capabilities" markdown>
 
-# Load from environment variables with STELLAR_ prefix
-# e.g., STELLAR_NETWORK=mainnet STELLAR_HORIZON_URL=https://custom.horizon.example
-stellar_config.load_from_env()
+<div markdown>
 
-# Get the horizon URL for the current network
-horizon_url = stellar_config.get_horizon_url()
+### Multiple sources
 
-# Check if using a known network
-if stellar_config.is_known_network():
-    print(f"Using known network: {stellar_config.get('stellar.network')}")
-else:
-    print(f"Using custom network: {stellar_config.get('stellar.network')}")
+Load values from environment variables and JSON files. YAML support is
+available as an optional extra.
 
-# Access other configuration values as usual
-network = stellar_config.get('stellar.network')
+</div>
+
+<div markdown>
+
+### Nested settings
+
+Use dot notation such as `database.host` in your code and double underscores
+such as `APP_DATABASE__HOST` in the environment.
+
+</div>
+
+<div markdown>
+
+### Validation built in
+
+Declare required keys, type hints, and custom validators, then collect
+configuration errors with `validate_all()`.
+
+</div>
+
+</div>
+
+## Find your next step
+
+<div class="docs-paths" markdown>
+
+<div markdown>
+
+### Guides
+
+Set up configuration from files or environment variables, or use the
+Stellar-specific helper.
+
+[Configuration guide](configuration/usage.md) ·
+[Stellar configuration](configuration/stellar.md)
+
+</div>
+
+<div markdown>
+
+### Reference and examples
+
+Explore the public API and copy working examples into your project.
+
+[API reference](api/config.md) ·
+[Basic example](examples/basic.md) ·
+[Stellar example](examples/stellar.md)
+
+</div>
+
+</div>
+
+## Install
+
+```bash
+pip install configmate
 ```
 
-The `StellarConfig` class extends `Config` and provides:
+For YAML configuration files, install the optional dependency:
 
-- Defaults for `stellar.network` (testnet) and `stellar.horizon_url` (based on network)
-- Automatic loading from environment variables with `STELLAR_` prefix
-- Validation for the network field
-- Helper methods like `get_horizon_url()` and `is_known_network()`
+```bash
+pip install "configmate[yaml]"
+```
 
-## Documentation
-
-For more detailed documentation, please refer to the following sections:
-
-- [Configuration](configuration/usage.md)
-- [Stellar Configuration](configuration/stellar.md)
-- [API Reference](api/config.md)
-- [Examples](examples/basic.md)
-
-## License
-
-MIT
+ConfigMate is maintained by **Kairo Solutions** and released under the MIT
+license. Contributions are welcome; see the
+[contributor guide](about/contributing.md).

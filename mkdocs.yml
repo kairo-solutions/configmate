@@ -12,14 +12,14 @@ theme:
   name: material
   palette:
     - scheme: default
-      primary: indigo
-      accent: indigo
+      primary: teal
+      accent: teal
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: teal
+      accent: teal
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -33,7 +33,12 @@ theme:
     - search.suggest
     - content.code.annotate
 
+extra_css:
+  - assets/stylesheets/documentation.css
+
 markdown_extensions:
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
   - pymdownx.highlight:
