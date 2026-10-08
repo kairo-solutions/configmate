@@ -1,0 +1,60 @@
+site_name: ConfigMate
+site_description: A simple, powerful configuration management library for Python
+site_author: Kairo Solutions
+site_url: https://github.com/kairo-solutions/configmate
+
+repo_url: https://github.com/kairo-solutions/configmate
+repo_name: kairo-solutions/configmate
+
+copyright: Copyright &copy; 2023 - 2026 Kairo Solutions
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.highlight
+    - search.share
+    - search.suggest
+    - content.code.annotate
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfloats
+
+nav:
+  - Home: index.md
+  - Configuration:
+      - Usage: configuration/usage.md
+      - Stellar Configuration: configuration/stellar.md
+  - API Reference:
+      - Config: api/config.md
+      - StellarConfig: api/stellar_config.md
+      - ValidationError: api/validation_error.md
+  - Examples:
+      - Basic: examples/basic.md
+      - Stellar: examples/stellar.md
+  - About:
+      - Changelog: about/changelog.md
+      - Contributing: about/contributing.md
+      - License: about/license.md
