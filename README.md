@@ -1,5 +1,10 @@
 # ConfigMate
 
+![CI](https://img.shields.io/github/actions/workflow/status/kairo-solutions/configmate/ci.yml?branch=master)
+![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9%20|%203.10%20|%203.11-blue)
+
 A simple, powerful configuration management library for Python applications.
 
 ## Features
@@ -44,8 +49,6 @@ database_url = config.get('database.url')
 ```
 
 ### Stellar Configuration
-
-ConfigMate includes optional Stellar-specific configuration loading for applications that interact with the Stellar network.
 
 ```python
 from configmate import StellarConfig
