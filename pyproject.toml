@@ -30,6 +30,13 @@ classifiers = [
 Homepage = "https://github.com/kairo-solutions/configmate"
 Documentation = "https://github.com/kairo-solutions/configmate#readme"
 
+[project.optional-dependencies]
+test = [
+    "pytest>=6.0",
+    "mkdocs>=1.0",
+    "mkdocs-material>=8.0"
+]
+
 [project.scripts]
 configmate = "configmate.cli:main"
 
