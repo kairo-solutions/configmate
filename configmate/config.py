@@ -16,6 +16,10 @@ class ValidationError(Exception):
     pass
 
 
+# Sentinel for invalid boolean values loaded from environment
+_INVALID_BOOL = object()
+
+
 class Config:
     """An advanced configuration manager with validation and nested support."""
     
@@ -65,7 +69,11 @@ class Config:
                 if key_prefix:
                     config_key = f'{key_prefix}.{config_key}'
                 
-                converted_value = self._convert_value(config_key, value)
+                try:
+                    converted_value = self._convert_value(config_key, value)
+                except ValueError:
+                    # Store the raw string; validate_all will report it as a type mismatch
+                    converted_value = _INVALID_BOOL
                 self.set(config_key, converted_value)
     
     def load_from_file(self, file_path: Union[str, Path]) -> None:
@@ -115,7 +123,13 @@ class Config:
         # Check type hints
         for key, expected_type in self._type_hints.items():
             value = self._get_nested(key)
-            if value is not None and not isinstance(value, expected_type):
+            if value is _INVALID_BOOL:
+                errors.append(
+                    f"Invalid boolean value for key '{key}'; "
+                    f"accepted spellings (case-insensitive): "
+                    f"true/false, 1/0, yes/no, on/off"
+                )
+            elif value is not None and not isinstance(value, expected_type):
                 errors.append(
                     f"Type mismatch for key '{key}': expected {expected_type.__name__}, "
                     f"got {type(value).__name__}"
@@ -127,13 +141,26 @@ class Config:
         """Return the entire configuration as a dictionary."""
         return self._config.copy()
     
+    TRUE_BOOL_SPELLINGS = ('true', '1', 'yes', 'on')
+    FALSE_BOOL_SPELLINGS = ('false', '0', 'no', 'off')
+
     def _convert_value(self, key: str, value: str) -> Any:
         """Convert string value to appropriate type based on type hints."""
         if key in self._type_hints:
             type_hint = self._type_hints[key]
             try:
                 if type_hint == bool:
-                    return value.lower() in ('true', '1', 'yes', 'on')
+                    lowered = value.lower()
+                    if lowered in self.TRUE_BOOL_SPELLINGS:
+                        return True
+                    elif lowered in self.FALSE_BOOL_SPELLINGS:
+                        return False
+                    else:
+                        raise ValueError(
+                            f"Invalid boolean value '{value}' for key '{key}'; "
+                            f"accepted spellings (case-insensitive): "
+                            f"true/false, 1/0, yes/no, on/off"
+                        )
                 elif type_hint == int:
                     return int(value)
                 elif type_hint == float:
