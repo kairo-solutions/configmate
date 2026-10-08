@@ -12,7 +12,7 @@ license = {text = "MIT"}
 authors = [
     {name = "GdAyo19", email = "theyagolarewaju@gmail.com"}
 ]
-keywords = ["configuration", "settings", "environment", "devops"]
+keywords = ["configuration", "settings", "environment", "devops", "stellar"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
