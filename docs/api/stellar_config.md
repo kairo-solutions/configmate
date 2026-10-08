@@ -4,7 +4,7 @@ A configuration manager with Stellar-specific defaults and validation.
 
 ## API Reference
 
-For the full API, see the [source code](../../../configmate/stellar.py).
+For the full API, see the [source code](https://github.com/kairo-solutions/configmate/blob/master/configmate/stellar.py).
 
 ## Features
 

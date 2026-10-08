@@ -7,13 +7,15 @@
 
 A simple, powerful configuration management library for Python applications.
 
+[**Read the documentation**](https://kairo-solutions.github.io/configmate/)
+
 ## Features
 
 - Load configuration from multiple sources (environment variables, files, defaults)
 - Automatic type conversion and validation
 - Nested configuration support
 - Easy to use API
-- Zero dependencies
+- Zero required dependencies (optional PyYAML support for YAML files)
 - **Stellar-specific configuration loading** (optional)
 
 ## About Kairo Solutions
@@ -30,6 +32,12 @@ We believe in:
 
 ```bash
 pip install configmate
+```
+
+To load YAML configuration files, install the optional dependency:
+
+```bash
+pip install "configmate[yaml]"
 ```
 
 ## Usage
@@ -82,3 +90,10 @@ The `StellarConfig` class extends `Config` and provides:
 ## License
 
 MIT
+
+## Contributing
+
+Bug reports and feature requests can be filed in the
+[issue tracker](https://github.com/kairo-solutions/configmate/issues/new/choose).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidance on
+preparing focused issues for Drips Wave.

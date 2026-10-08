@@ -8,7 +8,7 @@ A simple, powerful configuration management library for Python applications.
 - Automatic type conversion and validation
 - Nested configuration support
 - Easy to use API
-- Zero dependencies
+- Zero required dependencies; install `configmate[yaml]` for YAML file support
 - **Stellar-specific configuration loading** (optional)
 
 ## About Kairo Solutions
@@ -82,10 +82,10 @@ The `StellarConfig` class extends `Config` and provides:
 
 For more detailed documentation, please refer to the following sections:
 
-- [Configuration](../configuration/usage.md)
-- [Stellar Configuration](../configuration/stellar.md)
-- [API Reference](../api/config.md)
-- [Examples](../examples/basic.md)
+- [Configuration](configuration/usage.md)
+- [Stellar Configuration](configuration/stellar.md)
+- [API Reference](api/config.md)
+- [Examples](examples/basic.md)
 
 ## License
 

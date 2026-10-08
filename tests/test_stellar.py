@@ -19,17 +19,19 @@ def test_get_horizon_url():
     # Default horizon URL for testnet
     assert config.get_horizon_url() == 'https://horizon-testnet.stellar.org'
 
+    config.set('stellar.network', 'mainnet')
+    assert config.get('stellar.horizon_url') == 'https://horizon.stellar.org'
+    assert config.get_horizon_url() == 'https://horizon.stellar.org'
+    config.set('stellar.network', 'unknown')
+    config.set('stellar.network', 'futurenet')
+    assert config.get_horizon_url() == 'https://horizon-futurenet.stellar.org'
+
     # Set custom horizon URL
     config.set('stellar.horizon_url', 'https://custom.example')
     assert config.get_horizon_url() == 'https://custom.example'
 
     # Set network to mainnet, horizon URL should default to mainnet if not set
     config.set('stellar.network', 'mainnet')
-    # Note: we didn't set horizon URL, so it should default to mainnet
-    # But note: in our implementation, we don't automatically update the horizon URL when network changes.
-    # So the horizon URL remains the custom one unless we set it.
-    # Actually, in our get_horizon_url method, if the user has set a horizon URL (even if it's from a previous network),
-    # we return it. So we need to reset the horizon URL to None to test the default.
     config.set('stellar.horizon_url', None)
     assert config.get_horizon_url() == 'https://horizon.stellar.org'
 
@@ -55,19 +57,26 @@ def test_is_known_network():
 
 def test_load_from_env():
     """Test loading from environment variables."""
-    # Set environment variables
-    os.environ['STELLAR_NETWORK'] = 'mainnet'
-    os.environ['STELLAR_HORIZON_URL'] = 'https://env.example'
+    old_network = os.environ.get('STELLAR_NETWORK')
+    old_horizon_url = os.environ.get('STELLAR_HORIZON_URL')
+    try:
+        os.environ['STELLAR_NETWORK'] = 'mainnet'
+        os.environ['STELLAR_HORIZON_URL'] = 'https://env.example'
 
-    config = StellarConfig()
-    config.load_from_env()
+        config = StellarConfig()
+        config.load_from_env()
 
-    assert config.get('stellar.network') == 'mainnet'
-    assert config.get('stellar.horizon_url') == 'https://env.example'
-
-    # Clean up
-    del os.environ['STELLAR_NETWORK']
-    del os.environ['STELLAR_HORIZON_URL']
+        assert config.get('stellar.network') == 'mainnet'
+        assert config.get('stellar.horizon_url') == 'https://env.example'
+    finally:
+        if old_network is None:
+            os.environ.pop('STELLAR_NETWORK', None)
+        else:
+            os.environ['STELLAR_NETWORK'] = old_network
+        if old_horizon_url is None:
+            os.environ.pop('STELLAR_HORIZON_URL', None)
+        else:
+            os.environ['STELLAR_HORIZON_URL'] = old_horizon_url
 
 
 def test_validation():

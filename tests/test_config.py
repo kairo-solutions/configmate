@@ -21,6 +21,13 @@ def test_set_default():
     config.set_default('test_bool', True, bool)
     assert config.get('test_bool') is True
 
+    config.set_default('database.port', 5432, int)
+    assert config.get('database.port') == 5432
+    assert config.to_dict()['database']['port'] == 5432
+    config.set('database.port', 6432)
+    config.set_default('database.port', 5432, int)
+    assert config.get('database.port') == 6432
+
 
 def test_load_from_env():
     """Test loading from environment variables."""
@@ -224,11 +231,11 @@ def test_get_nested():
     
     # Test getting from nested structure
     config.set('a.b.c', 'deep_value')
-    config.set('a.b', {'x': 'shallow'})
+    config.set('a.b.x', 'shallow')
     config.set('simple', 'value')
     
     assert config.get('a.b.c') == 'deep_value'
-    assert config.get('a.b') == {'x': 'shallow'}
+    assert config.get('a.b') == {'c': 'deep_value', 'x': 'shallow'}
     assert config.get('a.b.x') == 'shallow'
     assert config.get('simple') == 'value'
     assert config.get('nonexistent', 'default') == 'default'

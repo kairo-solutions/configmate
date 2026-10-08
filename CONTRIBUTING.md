@@ -5,12 +5,32 @@ Thank you for considering contributing to ConfigMate! We welcome contributions f
 ## How to Contribute
 
 ### Reporting Issues
-- Use the GitHub issue tracker to report bugs or suggest features
+- Use the [GitHub issue tracker](https://github.com/kairo-solutions/configmate/issues/new/choose)
+  to report bugs or suggest features
 - Please include as much detail as possible, including:
   - Steps to reproduce the issue
   - Expected vs actual behavior
   - Your environment (Python version, OS, etc.)
   - Relevant code snippets or error messages
+
+### Preparing Issues for Drips Wave
+
+ConfigMate can be proposed to a Drips Wave program by its maintainers. Follow
+the [Drips Wave maintainer process](https://docs.drips.network/wave/): apply the
+repository to a program and wait for approval before listing work for a Wave.
+Once approved, choose work that can be completed and reviewed within the cycle.
+
+For each candidate issue, describe:
+
+- The user problem and why it matters
+- A bounded scope, including what is out of scope
+- Observable acceptance criteria and how to test the result
+- Relevant code or documentation areas, and any dependencies
+
+Avoid broad requests such as “improve the library” or tasks whose completion
+depends on unbounded design work. Keep the issue updated and be available to
+answer questions and review pull requests during the cycle. Add point values
+through the active Wave program's process rather than guessing them in an issue.
 
 ### Pull Requests
 1. Fork the repository

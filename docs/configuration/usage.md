@@ -20,7 +20,7 @@ database_url = config.get('database.url')
 - Automatic type conversion and validation
 - Nested configuration support
 - Easy to use API
-- Zero dependencies
+- Zero required dependencies; install `configmate[yaml]` for YAML file support
 
 ## API Reference
 

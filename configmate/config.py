@@ -4,9 +4,11 @@ ConfigMate - Advanced configuration management utility
 
 import os
 import json
-from typing import Any, Dict, Optional, Union, List, Callable
+from typing import Any, Dict, Union, List, Callable
 from pathlib import Path
-import re
+
+
+_MISSING = object()
 
 
 class ValidationError(Exception):
@@ -29,9 +31,8 @@ class Config:
         self._defaults[key] = value
         self._type_hints[key] = type_hint
         
-        # If key doesn't exist, set it to the default
-        if key not in self._config:
-            self._config[key] = value
+        if self._get_nested(key, _MISSING) is _MISSING:
+            self._set_nested(key, value)
     
     def require(self, key: str) -> None:
         """Mark a configuration key as required."""
@@ -44,19 +45,28 @@ class Config:
     def load_from_env(self, prefix: str = '', lowercase_keys: bool = True, 
                      separator: str = '__') -> None:
         """Load configuration from environment variables."""
+        self._load_from_env(prefix, lowercase_keys, separator)
+
+    def _load_from_env(
+        self,
+        prefix: str,
+        lowercase_keys: bool,
+        separator: str,
+        key_prefix: str = '',
+    ) -> None:
         for key, value in os.environ.items():
             if key.startswith(prefix):
                 config_key = key[len(prefix):]
                 if lowercase_keys:
-                    # Convert APP_DATABASE__HOST to database.host
                     config_key = config_key.lower()
                     if separator in config_key:
                         parts = config_key.split(separator)
                         config_key = '.'.join(part.lower() for part in parts)
+                if key_prefix:
+                    config_key = f'{key_prefix}.{config_key}'
                 
-                # Try to convert value to appropriate type
                 converted_value = self._convert_value(config_key, value)
-                self._set_nested(config_key, converted_value)
+                self.set(config_key, converted_value)
     
     def load_from_file(self, file_path: Union[str, Path]) -> None:
         """Load configuration from a JSON or YAML file."""
@@ -181,7 +191,7 @@ class Config:
     def _update_nested(self, update_dict: Dict[str, Any]) -> None:
         """Update configuration with a flattened dictionary."""
         for key, value in update_dict.items():
-            self._set_nested(key, value)
+            self.set(key, value)
 
 
 # Convenience instance

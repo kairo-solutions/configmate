@@ -28,9 +28,12 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/kairo-solutions/configmate"
-Documentation = "https://github.com/kairo-solutions/configmate#readme"
+Documentation = "https://kairo-solutions.github.io/configmate/"
 
 [project.optional-dependencies]
+yaml = [
+    "PyYAML>=5.1",
+]
 test = [
     "pytest>=6.0",
     "mkdocs>=1.0",

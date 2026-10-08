@@ -1,7 +1,7 @@
 site_name: ConfigMate
 site_description: A simple, powerful configuration management library for Python
 site_author: Kairo Solutions
-site_url: https://github.com/kairo-solutions/configmate
+site_url: https://kairo-solutions.github.io/configmate/
 
 repo_url: https://github.com/kairo-solutions/configmate
 repo_name: kairo-solutions/configmate
@@ -40,7 +40,6 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfloats
 
 nav:
   - Home: index.md

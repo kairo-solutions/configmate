@@ -4,7 +4,7 @@ The main configuration manager class.
 
 ## API Reference
 
-For the full API, see the [source code](../../../configmate/config.py).
+For the full API, see the [source code](https://github.com/kairo-solutions/configmate/blob/master/configmate/config.py).
 
 ## Key Methods
 
