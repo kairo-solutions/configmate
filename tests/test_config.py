@@ -221,15 +221,21 @@ def test_type_validation():
 def test_get_nested():
     """Test nested configuration access."""
     config = Config()
-    
+
     # Test getting from nested structure
     config.set('a.b.c', 'deep_value')
-    config.set('a.b', {'x': 'shallow'})
-    config.set('simple', 'value')
-    
     assert config.get('a.b.c') == 'deep_value'
+    assert config.get('a.b') == {'c': 'deep_value'}
+    assert config.get('a') == {'b': {'c': 'deep_value'}}
+
+    # Test overwriting with a new dictionary
+    config.set('a.b', {'x': 'shallow'})
     assert config.get('a.b') == {'x': 'shallow'}
     assert config.get('a.b.x') == 'shallow'
+    # The deep value should now be gone
+    assert config.get('a.b.c') is None
+
+    config.set('simple', 'value')
     assert config.get('simple') == 'value'
     assert config.get('nonexistent', 'default') == 'default'
     assert config.get('a.nonexistent', 'default') == 'default'
