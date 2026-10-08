@@ -1,6 +1,6 @@
 # Changelog
 
-For a detailed list of changes, please refer to the [git commit history](https://github.com/kairo-solutions/configmate/commits/main).
+For a detailed list of changes, please refer to the [git commit history](https://github.com/kairo-solutions/configmate/commits/master).
 
 ## Recent Changes
 
@@ -11,4 +11,4 @@ For a detailed list of changes, please refer to the [git commit history](https:/
 
 ## All Changes
 
-See the [full commit history](https://github.com/kairo-solutions/configmate/commits/main) for all changes.
+See the [full commit history](https://github.com/kairo-solutions/configmate/commits/master) for all changes.
