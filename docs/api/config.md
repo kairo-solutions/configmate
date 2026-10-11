@@ -12,7 +12,10 @@ For the full API, see the [source code](https://github.com/kairo-solutions/confi
 - `require(key)`: Mark a configuration key as required.
 - `validate(key, validator)`: Add a validation function for a configuration key.
 - `load_from_env(prefix='', lowercase_keys=True, separator='__')`: Load configuration from environment variables.
-- `load_from_file(file_path)`: Load configuration from a JSON or YAML file.
+- `load_from_file(file_path)`: Load JSON (`.json`) or YAML (`.yaml`, `.yml`, requires
+  PyYAML). Extensions are case-insensitive. Unsupported formats, including
+  `.jsonc`, raise `ValueError: Unsupported file format: <suffix>` for existing
+  files. See [supported file formats](../configuration/usage.md#supported-file-formats).
 - `get(key, default=None)`: Get a configuration value, supporting nested keys.
 - `set(key, value)`: Set a configuration value, supporting nested keys.
 - `validate_all()`: Validate all configuration and return list of errors.
