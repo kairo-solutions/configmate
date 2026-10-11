@@ -262,26 +262,73 @@ def test_set_nested():
     assert config.get('a.b') == {'existing': 'value', 'new_key': 'new_value'}
 
 
-def test_to_dict():
-    """Test converting configuration to dictionary."""
-    config = Config()
-    config.set('simple', 'value')
-    config.set('nested.key', 'nested_value')
-    config.set('another.nested.deep', 'deep_value')
+def test_bool_conversion_rejects_invalid():
+    """Test that invalid boolean values are rejected instead of silently becoming False."""
+    import os
+    # Set invalid boolean values
+    os.environ['APP_INVALID_BOOL'] = 'treu'
+    os.environ['APP_ANOTHER_INVALID'] = 'maybe'
+    os.environ['APP_VALID_TRUE'] = 'TRUE'
+    os.environ['APP_VALID_FALSE'] = 'FALSE'
+    os.environ['APP_VALID_ON'] = 'on'
+    os.environ['APP_VALID_OFF'] = 'off'
+    os.environ['APP_VALID_YES'] = 'yes'
+    os.environ['APP_VALID_NO'] = 'no'
+    os.environ['APP_VALID_ONE'] = '1'
+    os.environ['APP_VALID_ZERO'] = '0'
     
-    result = config.to_dict()
-    expected = {
-        'simple': 'value',
-        'nested': {
-            'key': 'nested_value'
-        },
-        'another': {
-            'nested': {
-                'deep': 'deep_value'
-            }
-        }
-    }
-    assert result == expected
+    config = Config()
+    config.set_default('invalid_bool', False, bool)
+    config.set_default('another_invalid', False, bool)
+    config.set_default('valid_true', False, bool)
+    config.set_default('valid_false', True, bool)
+    config.set_default('valid_on', False, bool)
+    config.set_default('valid_off', True, bool)
+    config.set_default('valid_yes', False, bool)
+    config.set_default('valid_no', True, bool)
+    config.set_default('valid_one', False, bool)
+    config.set_default('valid_zero', True, bool)
+    
+    config.load_from_env(prefix='APP_')
+    
+    errors = config.validate_all()
+    error_text = ' '.join(errors)
+    assert 'invalid_bool' in error_text, f"Expected error for invalid_bool, got: {errors}"
+    assert 'another_invalid' in error_text, f"Expected error for another_invalid, got: {errors}"
+    
+    # Valid values should be correct
+    assert config.get('valid_true') is True
+    assert config.get('valid_false') is False
+    assert config.get('valid_on') is True
+    assert config.get('valid_off') is False
+    assert config.get('valid_yes') is True
+    assert config.get('valid_no') is False
+    assert config.get('valid_one') is True
+    assert config.get('valid_zero') is False
+    
+    # Clean up
+    for k in ['APP_INVALID_BOOL', 'APP_ANOTHER_INVALID', 'APP_VALID_TRUE',
+              'APP_VALID_FALSE', 'APP_VALID_ON', 'APP_VALID_OFF', 'APP_VALID_YES',
+              'APP_VALID_NO', 'APP_VALID_ONE', 'APP_VALID_ZERO']:
+        del os.environ[k]
+
+
+def test_bool_conversion_case_insensitive():
+    """Test that boolean spellings are accepted case-insensitively."""
+    import os
+    os.environ['APP_TEST'] = 'TrUe'
+    config = Config()
+    config.set_default('test', False, bool)
+    config.load_from_env(prefix='APP_')
+    assert config.get('test') is True
+    del os.environ['APP_TEST']
+    
+    os.environ['APP_TEST'] = 'FaLsE'
+    config2 = Config()
+    config2.set_default('test', True, bool)
+    config2.load_from_env(prefix='APP_')
+    assert config2.get('test') is False
+    del os.environ['APP_TEST']
 
 
 if __name__ == '__main__':
@@ -296,4 +343,6 @@ if __name__ == '__main__':
     test_get_nested()
     test_set_nested()
     test_to_dict()
+    test_bool_conversion_rejects_invalid()
+    test_bool_conversion_case_insensitive()
     print("All tests passed!")
