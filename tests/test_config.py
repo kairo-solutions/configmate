@@ -11,6 +11,9 @@ from unittest.mock import patch
 import pytest
 
 from configmate.config import Config, ValidationError
+from importlib import import_module
+
+config_module = import_module('configmate.config')
 
 
 def test_set_default():
@@ -134,7 +137,7 @@ def test_reject_jsonc_file(suffix, content, tmp_path):
     config = Config()
     config.set('debug', False)
 
-    with patch('configmate.config.json.load', wraps=json.load) as load_json:
+    with patch.object(config_module.json, 'load', wraps=json.load) as load_json:
         with pytest.raises(ValueError) as exc_info:
             config.load_from_file(path)
         load_json.assert_not_called()
