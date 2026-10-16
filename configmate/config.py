@@ -82,7 +82,7 @@ class Config:
         if not path.exists():
             raise FileNotFoundError(f"Configuration file not found: {file_path}")
         
-        if path.suffix.lower() in ['.json', '.jsonc']:
+        if path.suffix.lower() == '.json':
             with open(path, 'r') as f:
                 data = json.load(f)
         elif path.suffix.lower() in ['.yaml', '.yml']:

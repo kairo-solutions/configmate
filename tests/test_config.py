@@ -6,7 +6,14 @@ import tempfile
 import os
 import json
 from pathlib import Path
+from unittest.mock import patch
+
+import pytest
+
 from configmate.config import Config, ValidationError
+from importlib import import_module
+
+config_module = import_module('configmate.config')
 
 
 def test_set_default():
@@ -89,6 +96,55 @@ def test_load_from_file():
         assert config.get('database.port') == 5432
     finally:
         os.unlink(temp_file)
+
+
+@pytest.mark.parametrize('suffix', ['.json', '.JSON'])
+def test_load_from_json_file(suffix, tmp_path):
+    """JSON keeps its nested values and case-insensitive extension support."""
+    path = tmp_path / ('config' + suffix)
+    data = {'debug': True, 'database': {'port': 5432}}
+    path.write_text(json.dumps(data))
+    config = Config()
+
+    config.load_from_file(path)
+
+    assert config.to_dict() == data
+
+
+@pytest.mark.parametrize('suffix', ['.yaml', '.yml', '.YAML', '.YML'])
+def test_load_from_yaml_file(suffix, tmp_path):
+    """Supported YAML extensions still use the optional YAML parser."""
+    pytest.importorskip('yaml')
+    path = tmp_path / ('config' + suffix)
+    path.write_text('debug: true\ndatabase:\n  port: 5432\n')
+    config = Config()
+
+    config.load_from_file(path)
+
+    assert config.to_dict() == {'debug': True, 'database': {'port': 5432}}
+
+
+@pytest.mark.parametrize('suffix', ['.jsonc', '.JSONC'])
+@pytest.mark.parametrize('content', [
+    '{"debug": true}',
+    '{\n// comment\n"debug": true\n}',
+    '{/* comment */ "debug": true}',
+])
+def test_reject_jsonc_file(suffix, content, tmp_path):
+    """JSONC is unsupported, with or without comments, and is never parsed."""
+    path = tmp_path / ('config' + suffix)
+    path.write_text(content)
+    config = Config()
+    config.set('debug', False)
+
+    with patch.object(config_module.json, 'load', wraps=json.load) as load_json:
+        with pytest.raises(ValueError) as exc_info:
+            config.load_from_file(path)
+        load_json.assert_not_called()
+
+    assert type(exc_info.value) is ValueError
+    assert str(exc_info.value) == f'Unsupported file format: {suffix}'
+    assert config.to_dict() == {'debug': False}
 
 
 def test_get_with_default():

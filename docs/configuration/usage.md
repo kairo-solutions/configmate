@@ -22,6 +22,18 @@ database_url = config.get('database.url')
 - Easy to use API
 - Zero required dependencies; install `configmate[yaml]` for YAML file support
 
+## Supported File Formats
+
+`load_from_file()` supports JSON (`.json`) and YAML (`.yaml`, `.yml`).
+Extensions are case-insensitive. YAML requires the optional `configmate[yaml]`
+dependency.
+
+JSONC (`.jsonc`) is not supported, even when the file contains no comments.
+Loading an existing `.jsonc` file raises
+`ValueError: Unsupported file format: .jsonc` rather than attempting JSON parsing.
+To use a JSONC configuration, remove its comments and any other non-JSON syntax,
+then save the resulting valid JSON with a `.json` extension.
+
 ## API Reference
 
 For the full API reference, see the [API Reference](../api/config.md) section.
