@@ -11,6 +11,7 @@ def test_defaults():
     config = StellarConfig()
     assert config.get('stellar.network') == 'testnet'
     assert config.get('stellar.horizon_url') == 'https://horizon-testnet.stellar.org'
+    assert config.get_soroban_rpc_url() == 'https://soroban-testnet.stellar.org'
 
 
 def test_get_horizon_url():
@@ -34,6 +35,29 @@ def test_get_horizon_url():
     config.set('stellar.network', 'mainnet')
     config.set('stellar.horizon_url', None)
     assert config.get_horizon_url() == 'https://horizon.stellar.org'
+
+
+def test_soroban_rpc_url_tracks_network_until_overridden():
+    config = StellarConfig()
+
+    config.set('stellar.network', 'mainnet')
+    assert config.get_soroban_rpc_url() == 'https://soroban-rpc.stellar.org'
+
+    config.set('stellar.network', 'futurenet')
+    assert config.get_soroban_rpc_url() == 'https://rpc-futurenet.stellar.org'
+
+    config.set('stellar.soroban_rpc_url', 'https://rpc.custom.example')
+    config.set('stellar.network', 'testnet')
+    assert config.get_soroban_rpc_url() == 'https://rpc.custom.example'
+
+
+def test_soroban_rpc_url_loads_from_environment(monkeypatch):
+    monkeypatch.setenv('STELLAR_SOROBAN_RPC_URL', 'https://rpc.env.example')
+
+    config = StellarConfig()
+    config.load_from_env()
+
+    assert config.get_soroban_rpc_url() == 'https://rpc.env.example'
 
 
 def test_is_known_network():

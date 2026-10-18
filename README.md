@@ -70,6 +70,7 @@ stellar_config.load_from_env()
 
 # Get the horizon URL for the current network
 horizon_url = stellar_config.get_horizon_url()
+soroban_rpc_url = stellar_config.get_soroban_rpc_url()
 
 # Check if using a known network
 if stellar_config.is_known_network():
@@ -82,10 +83,12 @@ network = stellar_config.get('stellar.network')
 ```
 
 The `StellarConfig` class extends `Config` and provides:
-- Defaults for `stellar.network` (testnet) and `stellar.horizon_url` (based on network)
+- Defaults for `stellar.network` (testnet), `stellar.horizon_url`, and
+  `stellar.soroban_rpc_url` (both endpoint URLs follow the selected known network)
 - Automatic loading from environment variables with `STELLAR_` prefix
 - Validation for the network field
-- Helper methods like `get_horizon_url()` and `is_known_network()`
+- Helper methods like `get_horizon_url()`, `get_soroban_rpc_url()`, and
+  `is_known_network()`
 
 ## License
 

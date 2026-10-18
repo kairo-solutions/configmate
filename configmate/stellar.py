@@ -16,13 +16,24 @@ class StellarConfig(Config):
         'mainnet': 'https://horizon.stellar.org',
         'futurenet': 'https://horizon-futurenet.stellar.org',
     }
+    _NETWORK_SOROBAN_RPC_URLS = {
+        'testnet': 'https://soroban-testnet.stellar.org',
+        'mainnet': 'https://soroban-rpc.stellar.org',
+        'futurenet': 'https://rpc-futurenet.stellar.org',
+    }
 
     def __init__(self):
         """Initialize Stellar configuration with defaults for network and horizon URL."""
         super().__init__()
         self._horizon_url_explicit = False
+        self._soroban_rpc_url_explicit = False
         self.set_default('stellar.network', 'testnet', str)
         self.set_default('stellar.horizon_url', self._NETWORK_HORIZON_URLS['testnet'], str)
+        self.set_default(
+            'stellar.soroban_rpc_url',
+            self._NETWORK_SOROBAN_RPC_URLS['testnet'],
+            str,
+        )
         self.validate('stellar.network', self._validate_network)
 
     def _validate_network(self, value: str) -> bool:
@@ -35,11 +46,18 @@ class StellarConfig(Config):
         """Set a value and keep the default Horizon URL in sync with the network."""
         if key == 'stellar.horizon_url':
             self._horizon_url_explicit = True
-        elif key == 'stellar.network' and not self._horizon_url_explicit:
+        elif key == 'stellar.soroban_rpc_url':
+            self._soroban_rpc_url_explicit = True
+        elif key == 'stellar.network':
             default_url = self._NETWORK_HORIZON_URLS['testnet']
+            default_rpc_url = self._NETWORK_SOROBAN_RPC_URLS['testnet']
             if isinstance(value, str):
                 default_url = self._NETWORK_HORIZON_URLS.get(value, default_url)
-            super().set('stellar.horizon_url', default_url)
+                default_rpc_url = self._NETWORK_SOROBAN_RPC_URLS.get(value, default_rpc_url)
+            if not self._horizon_url_explicit:
+                super().set('stellar.horizon_url', default_url)
+            if not self._soroban_rpc_url_explicit:
+                super().set('stellar.soroban_rpc_url', default_rpc_url)
         super().set(key, value)
 
     def load_from_env(self, prefix: str = 'STELLAR_', lowercase_keys: bool = True,
@@ -69,6 +87,17 @@ class StellarConfig(Config):
             return url
         network = self.get('stellar.network')
         return self._NETWORK_HORIZON_URLS.get(network, self._NETWORK_HORIZON_URLS['testnet'])
+
+    def get_soroban_rpc_url(self) -> str:
+        """Get the Soroban RPC URL for the current network."""
+        url = self.get('stellar.soroban_rpc_url')
+        if url:
+            return url
+        network = self.get('stellar.network')
+        return self._NETWORK_SOROBAN_RPC_URLS.get(
+            network,
+            self._NETWORK_SOROBAN_RPC_URLS['testnet'],
+        )
 
     def is_known_network(self) -> bool:
         """Check if the current network is a known network (testnet, mainnet, futurenet).
