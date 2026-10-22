@@ -81,8 +81,9 @@ configuration errors with `validate_all()`.
 
 ### Guides
 
-Set up configuration from files or environment variables, or use the
-Stellar-specific helper.
+Set up configuration from files or environment variables. Stellar Python
+applications can use `StellarConfig` to select network-matched Horizon and
+Soroban RPC defaults or configure custom endpoints.
 
 [Configuration guide](configuration/usage.md) ·
 [Stellar configuration](configuration/stellar.md)

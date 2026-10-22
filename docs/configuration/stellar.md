@@ -1,38 +1,53 @@
 # Stellar Configuration
 
-ConfigMate includes optional Stellar-specific configuration loading for applications that interact with the Stellar network.
+`StellarConfig` gives Python applications that interact with Stellar one place
+to manage the selected network and its Horizon and Soroban RPC endpoints. It
+provides matching defaults for Testnet, Mainnet, and Futurenet, while allowing
+each endpoint to be overridden for hosted, local, or otherwise custom
+networks.
 
 ```python
 from configmate import StellarConfig
 
-# Create a Stellar configuration instance
-stellar_config = StellarConfig()
+config = StellarConfig()
+config.load_from_env()
 
-# Load from environment variables with STELLAR_ prefix
-# e.g., STELLAR_NETWORK=mainnet STELLAR_HORIZON_URL=https://custom.horizon.example
-stellar_config.load_from_env()
-
-# Get the horizon URL for the current network
-horizon_url = stellar_config.get_horizon_url()
-
-# Check if using a known network
-if stellar_config.is_known_network():
-    print(f"Using known network: {stellar_config.get('stellar.network')}")
-else:
-    print(f"Using custom network: {stellar_config.get('stellar.network')}")
-
-# Access other configuration values as usual
-network = stellar_config.get('stellar.network')
+network = config.get('stellar.network')
+horizon_url = config.get_horizon_url()
+soroban_rpc_url = config.get_soroban_rpc_url()
 ```
+
+By default, the network is `testnet`. Changing `stellar.network` updates both
+endpoint defaults together unless you explicitly set a custom URL. This keeps
+network selection in application configuration and avoids hard-coding endpoint
+URLs across Stellar application code.
+
+## Environment variables
+
+`load_from_env()` reads these variables by default:
+
+| Variable | Purpose |
+| --- | --- |
+| `STELLAR_NETWORK` | Select `testnet`, `mainnet`, `futurenet`, or a custom network name |
+| `STELLAR_HORIZON_URL` | Override the Horizon endpoint |
+| `STELLAR_SOROBAN_RPC_URL` | Override the Soroban RPC endpoint |
+
+For example, set `STELLAR_NETWORK=mainnet` to use the Mainnet endpoint defaults,
+or set either URL variable to use a custom endpoint.
 
 ## Features
 
 The `StellarConfig` class extends `Config` and provides:
 
-- Defaults for `stellar.network` (testnet) and `stellar.horizon_url` (based on network)
-- Automatic loading from environment variables with `STELLAR_` prefix
-- Validation for the network field
-- Helper methods like `get_horizon_url()` and `is_known_network()`
+- Testnet defaults and matching Horizon and Soroban RPC URLs for Testnet,
+  Mainnet, and Futurenet
+- Automatic loading from environment variables with the `STELLAR_` prefix
+- Helpers to retrieve endpoint URLs and identify the three preset networks
+- Support for custom network names and endpoint overrides
+
+`is_known_network()` only identifies whether the configured name is one of the
+three presets; custom names are allowed. ConfigMate manages configuration only:
+it does not provide Stellar SDK functionality or test endpoint connectivity.
 
 ## API Reference
 

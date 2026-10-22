@@ -16,7 +16,37 @@ A simple, powerful configuration management library for Python applications.
 - Nested configuration support
 - Easy to use API
 - Zero required dependencies (optional PyYAML support for YAML files)
-- **Stellar-specific configuration loading** (optional)
+- **Stellar-specific configuration loading** for Horizon and Soroban RPC endpoints
+
+## For Stellar Python applications
+
+ConfigMate includes `StellarConfig` to give Stellar applications one place to
+manage their network, Horizon URL, and Soroban RPC URL. It provides matching
+endpoint defaults for Testnet, Mainnet, and Futurenet, reads overrides from
+`STELLAR_` environment variables, and accepts custom endpoints for hosted or
+local networks. This helps keep endpoint selection in application
+configuration instead of scattering URLs through code.
+
+```python
+from configmate import StellarConfig
+
+config = StellarConfig()
+config.load_from_env()
+
+network = config.get("stellar.network")
+horizon_url = config.get_horizon_url()
+soroban_rpc_url = config.get_soroban_rpc_url()
+```
+
+Set `STELLAR_NETWORK=mainnet` to select Mainnet defaults, or provide
+`STELLAR_HORIZON_URL` and `STELLAR_SOROBAN_RPC_URL` to override either endpoint.
+ConfigMate manages these settings; it does not replace the Stellar SDK or check
+whether an endpoint is reachable. See the
+[Stellar configuration guide](https://kairo-solutions.github.io/configmate/configuration/stellar/).
+
+The [`typescript/`](typescript/) directory also contains a small TypeScript
+companion for typed endpoint defaults and custom URL overrides. It is source in
+this repository and is not yet published to npm.
 
 ## About Kairo Solutions
 

@@ -1,0 +1,19 @@
+{
+  "name": "@kairo-solutions/configmate-stellar",
+  "version": "0.1.0",
+  "description": "Stellar network endpoint defaults for ConfigMate projects",
+  "type": "module",
+  "exports": {
+    ".": "./.build/stellar-endpoints.js"
+  },
+  "files": [
+    ".build"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
