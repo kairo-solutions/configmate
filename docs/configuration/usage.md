@@ -20,13 +20,13 @@ database_url = config.get('database.url')
 - Automatic type conversion and validation
 - Nested configuration support
 - Easy to use API
-- Zero required dependencies; install `configmate[yaml]` for YAML file support
+- Zero required dependencies; install `kairo-configmate[yaml]` for YAML file support
 
 ## Supported File Formats
 
 `load_from_file()` supports JSON (`.json`) and YAML (`.yaml`, `.yml`).
-Extensions are case-insensitive. YAML requires the optional `configmate[yaml]`
-dependency.
+Extensions are case-insensitive. YAML requires the optional
+`kairo-configmate[yaml]` dependency.
 
 JSONC (`.jsonc`) is not supported, even when the file contains no comments.
 Loading an existing `.jsonc` file raises

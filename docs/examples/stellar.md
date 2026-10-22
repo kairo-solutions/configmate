@@ -1,30 +1,27 @@
-# Stellar Usage Example
+# Stellar SDK Usage Example
 
-This example shows how to use ConfigMate for Stellar network configuration.
+ConfigMate keeps network and endpoint settings in one place. The Stellar
+Python SDK provides clients that communicate with Horizon and Soroban RPC.
+Install the SDK separately with `pip install stellar-sdk`; it is not a required
+ConfigMate dependency. The Stellar Python SDK currently requires Python 3.10
+or newer.
 
 ```python
 from configmate import StellarConfig
+from stellar_sdk import Server, SorobanServer
 
-# Create a Stellar configuration instance
-stellar_config = StellarConfig()
+config = StellarConfig()
+config.load_from_env()
 
-# Load from environment variables with STELLAR_ prefix
-# e.g., STELLAR_NETWORK=mainnet STELLAR_HORIZON_URL=https://custom.horizon.example
-stellar_config.load_from_env()
-
-# Get the horizon URL for the current network
-horizon_url = stellar_config.get_horizon_url()
-
-# Check if using a known network
-if stellar_config.is_known_network():
-    print(f"Using known network: {stellar_config.get('stellar.network')}")
-else:
-    print(f"Using custom network: {stellar_config.get('stellar.network')}")
-
-# Access other configuration values as usual
-network = stellar_config.get('stellar.network')
-
-# Example: Initialize Stellar SDK (if you have the stellar-sdk installed)
-# from stellar_sdk import Server
-# server = Server(horizon_url)
+horizon = Server(config.get_horizon_url())
+soroban = SorobanServer(config.get_soroban_rpc_url())
 ```
+
+The constructors create clients; requests happen when you call SDK methods. For
+example, `horizon.root().call()` fetches Horizon's root resource and
+`soroban.get_health()` checks the configured Soroban RPC endpoint. These calls
+require network access. Keep Testnet and Mainnet credentials and operational
+policies separate in your application.
+
+See the [Stellar Python SDK documentation](https://stellar-sdk.readthedocs.io/)
+for client APIs and transaction guidance.

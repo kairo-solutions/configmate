@@ -106,14 +106,20 @@ Explore the public API and copy working examples into your project.
 
 ## Install
 
+The PyPI name `configmate` belongs to another project. This project uses
+`kairo-configmate`; its first PyPI release has not been published yet. From a
+source checkout:
+
 ```bash
-pip install configmate
+pip install .
 ```
 
-For YAML configuration files, install the optional dependency:
+After release, install from PyPI with `pip install kairo-configmate`.
+
+For YAML configuration files, install the optional extra:
 
 ```bash
-pip install "configmate[yaml]"
+pip install "kairo-configmate[yaml]"
 ```
 
 ConfigMate is maintained by **Kairo Solutions** and released under the MIT

@@ -3,9 +3,9 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "configmate"
+name = "kairo-configmate"
 version = "0.1.0"
-description = "A simple, powerful configuration management library for Python"
+description = "Python configuration with environment, file, and Stellar endpoint support"
 readme = "README.md"
 requires-python = ">=3.7"
 license = {text = "MIT"}
@@ -29,6 +29,8 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/kairo-solutions/configmate"
 Documentation = "https://kairo-solutions.github.io/configmate/"
+Repository = "https://github.com/kairo-solutions/configmate"
+"Bug Tracker" = "https://github.com/kairo-solutions/configmate/issues"
 
 [project.optional-dependencies]
 yaml = [

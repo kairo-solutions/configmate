@@ -60,14 +60,24 @@ We believe in:
 
 ## Installation
 
+The PyPI name `configmate` belongs to a different project. This project uses
+the distribution name `kairo-configmate`; its first PyPI release has not been
+published yet. To install the current source checkout:
+
 ```bash
-pip install configmate
+pip install .
 ```
 
-To load YAML configuration files, install the optional dependency:
+After the first release, install it from PyPI with:
 
 ```bash
-pip install "configmate[yaml]"
+pip install kairo-configmate
+```
+
+For YAML support, install the optional extra:
+
+```bash
+pip install "kairo-configmate[yaml]"
 ```
 
 ## Usage
